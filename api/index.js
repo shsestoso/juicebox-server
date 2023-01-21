@@ -35,6 +35,15 @@ apiRouter.use(async (req, res, next) => {
 });
 
 
+apiRouter.use((req, res, next) => {
+  if (req.user) {
+    console.log("User is set:", req.user);
+  }
+
+  next();
+});
+
+
 
 
 const usersRouter = require("./users");
@@ -53,34 +62,6 @@ apiRouter.use((error, req, res, next) => {
     });
   });
 
-  usersRouter.post('/login', async (req, res, next) => {
-    const { username, password } = req.body;
+ 
   
-    // request must have both
-    if (!username || !password) {
-      next({
-        name: "MissingCredentialsError",
-        message: "Please supply both a username and password"
-      });
-    }
-  
-    try {
-      const user = await getUserByUsername(username);
-  
-      if (user && user.password == password) {
-        // create token & return to user
-        const token = jwt.sign({id: 3, username: 'albert'}, {JWT_SECRET});
-        res.send({ message: "you're logged in!" }, token);
-      } else {
-        next({ 
-          name: 'IncorrectCredentialsError', 
-          message: 'Username or password is incorrect'
-        });
-      }
-    } catch(error) {
-      console.log(error);
-      next(error);
-    }
-  });
-
 module.exports = apiRouter;
