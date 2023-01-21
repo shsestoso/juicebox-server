@@ -69,10 +69,8 @@ apiRouter.use((error, req, res, next) => {
   
       if (user && user.password == password) {
         // create token & return to user
-        const token = jwt.sign({id: 3, username: 'albert'}, 'JWT_SERVER' )
-        token;
-        const recoveredData = jwt.verify(token,'JWT_SERVER')
-        res.send({ message: "you're logged in!" });
+        const token = jwt.sign({id: 3, username: 'albert'}, {JWT_SECRET});
+        res.send({ message: "you're logged in!" }, token);
       } else {
         next({ 
           name: 'IncorrectCredentialsError', 
