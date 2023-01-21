@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { getUserById } = require('../db');
 const { JWT_SECRET } = process.env;
 
-const token = jwt.sign({id: 3, username: 'albert'}, process.env.JWT_SECRET )
+
 
 const express = require('express');
 const apiRouter = express.Router();
@@ -69,6 +69,9 @@ apiRouter.use((error, req, res, next) => {
   
       if (user && user.password == password) {
         // create token & return to user
+        const token = jwt.sign({id: 3, username: 'albert'}, 'JWT_SERVER' )
+        token;
+        const recoveredData = jwt.verify(token,'JWT_SERVER')
         res.send({ message: "you're logged in!" });
       } else {
         next({ 
@@ -81,5 +84,5 @@ apiRouter.use((error, req, res, next) => {
       next(error);
     }
   });
-  
+
 module.exports = apiRouter;
